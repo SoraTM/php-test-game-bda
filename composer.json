@@ -1,0 +1,28 @@
+{
+    "name": "soratm/php-test-game",
+    "description": "Just another test from HH",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Timur Malikin",
+            "email": "timur.malikin@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "squizlabs/php_codesniffer": "2.*",
+        "satooshi/php-coveralls": "1.0.1",
+        "codeclimate/php-test-reporter": "dev-master"
+    },
+    "autoload": {
+        "files": [
+            "src/Game.php",
+            "src/Cell.php",
+            "src/GameState.php"
+        ]
+    }
+}
