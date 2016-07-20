@@ -4,17 +4,18 @@ $( document ).ready(function() {
         var diceCount = getCookie('gameState[diceCount]');
         console.log('clicked' + diceCount);
         if(diceCount > 0){
-            var promise = new Promise(function(resolve, reject) {
-                var result = animateDice(12, 80);
-                console.log()
-                if(result){
-                    resolve();
-                } else {
-                    reject();
-                }
-            });
-
-            promise.then(() => ajaxRefreshPage(), () => console.log('error'));
+            ajaxRefreshPage();
+            // var promise = new Promise(function(resolve, reject) {
+            //     var result = animateDice(12, 80);
+            //     console.log()
+            //     if(result){
+            //         resolve();
+            //     } else {
+            //         reject();
+            //     }
+            // });
+            //
+            // promise.then(() => ajaxRefreshPage(), () => console.log('error'));
 
         } else {
             alert('Game over!')
