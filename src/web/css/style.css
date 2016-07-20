@@ -1,0 +1,212 @@
+.court{
+    position: relative;
+    background: url(img/bg.jpg) no-repeat center;
+    width: 1000px;
+    height: 670px;
+}
+
+.total-score{
+    position: absolute;
+    color: #eee106;
+    top: 380px;
+    left: 435px;
+    text-align: right;
+    font-size: 22px;
+    width: 100px;
+}
+
+.step-score{
+    position: absolute;
+    color: #eee106;
+    top: 332px;
+    left: 435px;
+    text-align: right;
+    font-size: 22px;
+    width: 100px;
+}
+
+.dices{
+    position: absolute;
+    top: 200px;
+    height: 207px;
+    left: 345px;
+    text-align: right;
+    width: 360px;
+}
+
+.dice{
+    background: url(img/handsAnim.png) left top;
+    height: 207px;
+    width: 46px;
+    display: inline-block;
+}
+
+.dice:last-child{
+    width: 70px;
+}
+
+.dice-score{
+    position: absolute;
+    top: 345px;
+    left: 630px;
+    height: 66px;
+    width: 66px;
+}
+
+.dice-score-1{
+    background: url(img/1.png)
+}
+
+.dice-score-2{
+    background: url(img/2.png)
+}
+
+.dice-score-3{
+    background: url(img/3.png)
+}
+
+.dice-score-4{
+    background: url(img/4.png)
+}
+
+.dice-score-5{
+    background: url(img/5.png)
+}
+
+.dice-score-6{
+    background: url(img/6.png)
+}
+
+.empty-dices{
+    position: absolute;
+    font-size: 30px;
+    color: #0f0;
+    text-transform: uppercase;
+    top: 280px;
+    left: 295px;
+}
+
+#pimpa{
+    width: 35px;
+    height: 37px;
+    position: absolute;
+    background: url(img/pimpa.png) no-repeat center;
+}
+
+#pimpa.start{
+    top: 130px;
+    left: 220px;
+}
+
+#pimpa.snow-house-0{
+    top: 130px;
+    left: 305px;
+}
+
+#pimpa.snow-house-1{
+    top: 130px;
+    left: 395px;
+}
+
+#pimpa.wigwam-0{
+    top: 130px;
+    left: 480px;
+}
+
+#pimpa.wigwam-1{
+    top: 130px;
+    left: 570px;
+}
+
+#pimpa.train-0{
+    top: 130px;
+    left: 660px;
+}
+
+#pimpa.handcuffs-0{
+    top: 130px;
+    left: 745px;
+}
+
+#pimpa.back-0{
+    top: 210px;
+    left: 745px;
+}
+
+#pimpa.house-0{
+    top: 290px;
+    left: 745px;
+}
+
+#pimpa.house-1{
+    top: 365px;
+    left: 745px;
+}
+
+#pimpa.glass-0{
+    top: 445px;
+    left: 745px;
+}
+
+#pimpa.car-0{
+    top: 445px;
+    left: 660px;
+}
+
+#pimpa.up-0{
+    top: 445px;
+    left: 570px;
+}
+
+#pimpa.high-building-0{
+    top: 445px;
+    left: 480px;
+}
+
+#pimpa.high-building-1{
+    top: 445px;
+    left: 395px;
+}
+
+#pimpa.airplain-0{
+    top: 445px;
+    left: 305px;
+}
+
+#pimpa.police-0{
+    top: 445px;
+    left: 220px;
+}
+
+#pimpa.custle-0{
+    top: 365px;
+    left: 220px;
+}
+
+#pimpa.custle-1{
+    top: 290px;
+    left: 220px;
+}
+
+#pimpa.theater-0{
+    top: 210px;
+    left: 220px;
+}
+
+button{
+    width: 100px;
+    height: 50px;
+
+}
+
+#start-game{
+    position: absolute;
+    top: 300px;
+    right: 50px;
+}
+
+#reset-game{
+    position: absolute;
+    top: 360px;
+    right: 50px;
+}

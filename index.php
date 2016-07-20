@@ -4,6 +4,8 @@ namespace game;
 
 require(__DIR__ . '/vendor/autoload.php');
 
+//error_log(print_r($_POST, true), 3, 'error.log');
+
 //getting previous game state
 $gameState = new GameState();
 $gameState->loadState();
@@ -24,25 +26,39 @@ $game->addCell(new Cell('house-0', 50));
 $game->addCell(new Cell('house-1', 50));
 $game->addCell(new Cell('glass-0', 0));
 $game->addCell(new Cell('car-0', 20));
-$game->addCell(new Cell('up', 0, 'wigwam-1'));
+$game->addCell(new Cell('up-0', 0, 'wigwam-1'));
 $game->addCell(new Cell('high-building-0', 80));
 $game->addCell(new Cell('high-building-1', 80));
 $game->addCell(new Cell('airplain-0', 30));
-$game->addCell(new Cell('police', 0, 'handcuffs-0'));
+$game->addCell(new Cell('police-0', 0, 'handcuffs-0'));
 $game->addCell(new Cell('custle-0', 120));
 $game->addCell(new Cell('custle-1', 120));
-$game->addCell(new Cell('theater-0', 120));
+$game->addCell(new Cell('theater-0', 200));
 
-$game->setDiceScore();
-$game->setPosition();
+//checking dice Count
+if (isset($_POST['diceScore'])) {
+    $diceScore = $_POST['diceScore'];
+    $game->setDiceScore($diceScore);
+    $game->nextPosition();
 
-print_r($game->getDiceScore() . '-score ');
+    $result = [
+        'diceScore' => $game->getDiceScore(),
+    ];
 
-print_r($game->getPosition() . '-position ');
+    $game->step();
 
-print_r($game->getTotalScore() . '-total score');
+    //saving result
+    $gameState->saveState();
+}
 
-$game->step();
+//getting result and print it
+$result = [
+    'diceScore' => $game->getDiceScore(),
+    'stepScore' => $game->getStepScore(),
+    'totalScore' => $game->getTotalScore(),
+    'position' => $game->getPositionName(),
+    'diceCount' => $game->getDiceCount(),
+];
 
-//saving result
-$gameState->saveState();
+$renderer = new Renderer('index', $result);
+print_r($renderer->render());

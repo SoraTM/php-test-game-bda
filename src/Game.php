@@ -35,9 +35,10 @@ class Game
     private function cellAction()
     {
         $cellResult = $this->cells[$this->getPosition()]->action();
-        var_dump($cellResult);
         $this->applyBonus($cellResult['bonus']);
-        $this->setPosition($this->getPositionByName($cellResult['destination']));
+        if (isset($cellResult['destination'])) {
+            $this->setPosition($this->getPositionByName($cellResult['destination']));
+        }
     }
 
     private function applyBonus($bonus)
@@ -45,6 +46,7 @@ class Game
         if ($bonus > 0) {
             $this->setTotalScore($this->getTotalScore() + $bonus);
         }
+        $this->setStepScore($bonus);
     }
 
     private function getPositionByName($name)
@@ -52,8 +54,12 @@ class Game
         $arrFiltered = array_filter($this->cells, function ($item) use ($name) {
             return $item->getName() == $name;
         });
-
         return key($arrFiltered);
+    }
+
+    public function getPositionName()
+    {
+        return $this->cells[$this->getPosition()]->getName();
     }
 
     private function loadState()
@@ -77,9 +83,9 @@ class Game
         return $this->state;
     }
 
-    public function setDiceScore()
+    public function setDiceScore($score)
     {
-        $this->diceScore = rand(1, 6);
+        $this->diceScore = $score;
     }
 
     public function getDiceScore()
@@ -87,7 +93,12 @@ class Game
         return $this->diceScore;
     }
 
-    public function setPosition()
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function nextPosition()
     {
         $currentPosition = $this->getPosition();
         $nextPosition = $currentPosition + $this->getDiceScore();

@@ -75,6 +75,7 @@ class GameState
             $this->state['totalScore'] = 0;
             $this->state['position'] = 0;
             $this->state['diceCount'] = 7;
+            $this->saveState();
         }
     }
 }
