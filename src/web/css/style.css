@@ -45,7 +45,7 @@
     width: 70px;
 }
 
-.dice-score{
+#dice-score{
     position: absolute;
     top: 345px;
     left: 630px;

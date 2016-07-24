@@ -56,8 +56,19 @@ class GameState
         return $this->state['diceCount'];
     }
 
+    public function setDiceScore($count)
+    {
+        $this->state['diceScore'] = $count;
+    }
+
+    public function getDiceScore()
+    {
+        return $this->state['diceScore'];
+    }
+
     public function saveState()
     {
+        setcookie("gameState[diceScore]", $this->state['diceScore'], time()+3600);
         setcookie("gameState[stepScore]", $this->state['stepScore'], time()+3600);
         setcookie("gameState[totalScore]", $this->state['totalScore'], time()+3600);
         setcookie("gameState[position]", $this->state['position'], time()+3600);
@@ -71,6 +82,7 @@ class GameState
                 $this->state[$name] = $value;
             }
         } else {
+            $this->state['diceScore'] = 0;
             $this->state['stepScore'] = 0;
             $this->state['totalScore'] = 0;
             $this->state['position'] = 0;

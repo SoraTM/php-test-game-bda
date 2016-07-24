@@ -4,8 +4,6 @@ namespace game;
 
 require(__DIR__ . '/vendor/autoload.php');
 
-//error_log(print_r($_POST, true), 3, 'error.log');
-
 //getting previous game state
 $gameState = new GameState();
 $gameState->loadState();
@@ -39,16 +37,16 @@ $game->addCell(new Cell('theater-0', 200));
 if (isset($_POST['diceScore'])) {
     $diceScore = $_POST['diceScore'];
     $game->setDiceScore($diceScore);
-    $game->nextPosition();
-
-    $result = [
-        'diceScore' => $game->getDiceScore(),
-    ];
-
     $game->step();
 
     //saving result
     $gameState->saveState();
+}
+
+//used for getting pimpa steps, to animate on client
+if (isset($_GET['stepsToNextPoint'])) {
+    echo json_encode($game->getNextPositionRoute($_GET['stepsToNextPoint']));
+    return;
 }
 
 //getting result and print it
@@ -56,9 +54,10 @@ $result = [
     'diceScore' => $game->getDiceScore(),
     'stepScore' => $game->getStepScore(),
     'totalScore' => $game->getTotalScore(),
-    'position' => $game->getPositionName(),
+    'position' => $game->getPositionName($game->getPosition()),
     'diceCount' => $game->getDiceCount(),
 ];
 
 $renderer = new Renderer('index', $result);
-print_r($renderer->render());
+
+echo $renderer->render();

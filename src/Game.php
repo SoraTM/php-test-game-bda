@@ -6,12 +6,10 @@ class Game
 {
     private $diceScore;
     private $state;
-
     private $stepScore;
     private $totalScore;
     private $position;
     private $diceCount;
-
     private $cells = [];
 
     public function __construct($state)
@@ -22,6 +20,8 @@ class Game
 
     public function step()
     {
+        $nextPosition = $this->getNextPosition($this->getPosition(), $this->getDiceScore());
+        $this->setPosition($nextPosition);
         $this->decreaseDiceCount();
         $this->cellAction();
         $this->saveState();
@@ -57,14 +57,10 @@ class Game
         return key($arrFiltered);
     }
 
-    public function getPositionName()
-    {
-        return $this->cells[$this->getPosition()]->getName();
-    }
-
     private function loadState()
     {
         $this->position = $this->state->getPosition();
+        $this->diceScore = $this->state->getDiceScore();
         $this->stepScore = $this->state->getStepScore();
         $this->totalScore = $this->state->getTotalScore();
         $this->diceCount = $this->state->getDiceCount();
@@ -73,9 +69,34 @@ class Game
     private function saveState()
     {
         $this->state->setPosition($this->getPosition());
+        $this->state->setDiceScore($this->getDiceScore());
         $this->state->setStepScore($this->getStepScore());
         $this->state->setTotalScore($this->getTotalScore());
         $this->state->setDiceCount($this->getDiceCount());
+    }
+
+    public function getNextPosition($currentPosition, $stepsCount)
+    {
+        $currentPosition = $currentPosition;
+        $nextPosition = $currentPosition + $stepsCount;
+        if ($nextPosition > sizeof($this->cells) - 1) {
+            $nextPosition = $nextPosition - sizeof($this->cells);
+        }
+        return $nextPosition;
+    }
+
+    public function getNextPositionRoute($stepsToNextPoint)
+    {
+        $routeStart = $this->getPosition();
+        $routeLength = $stepsToNextPoint;
+        $route = [];
+
+        for ($i = 0; $i < $routeLength; $i++) {
+            $nextPosition = $this->getNextPosition($routeStart, 1);
+            $route[] = $this->getPositionName($nextPosition);
+            $routeStart = $nextPosition;
+        }
+        return $route;
     }
 
     public function getState()
@@ -93,20 +114,14 @@ class Game
         return $this->diceScore;
     }
 
+    public function getPositionName($position)
+    {
+        return $this->cells[$position]->getName();
+    }
+
     public function setPosition($position)
     {
         $this->position = $position;
-    }
-
-    public function nextPosition()
-    {
-        $currentPosition = $this->getPosition();
-        $nextPosition = $currentPosition + $this->getDiceScore();
-        if ($nextPosition > sizeof($this->cells) - 1) {
-            $nextPosition = $nextPosition - sizeof($this->cells);
-        }
-        $this->position = $nextPosition;
-        $this->state->setPosition($this->position);
     }
 
     public function getPosition()

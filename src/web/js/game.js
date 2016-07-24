@@ -1,62 +1,116 @@
-$( document ).ready(function() {
-
+$(document).ready(function() {
     $('body').on("click", "#start-game", (function () {
         var diceCount = getCookie('gameState[diceCount]');
-        console.log('clicked' + diceCount);
         if(diceCount > 0){
-            ajaxRefreshPage();
-            // var promise = new Promise(function(resolve, reject) {
-            //     var result = animateDice(12, 80);
-            //     console.log()
-            //     if(result){
-            //         resolve();
-            //     } else {
-            //         reject();
-            //     }
-            // });
-            //
-            // promise.then(() => ajaxRefreshPage(), () => console.log('error'));
-
+            $("#start-game").prop( "disabled", true );
+            $("#dice-score").removeClass();
+            var diceScore = getDiceScore(1, 6);
+            animateDice(12, 80).then(
+                () => showDice(diceScore)).then(
+                    () => $.getJSON("/?stepsToNextPoint=" + diceScore)).then(
+                        (data) => animatePimpa(data)).then(
+                            () => ajaxRefreshPage(diceScore));
         } else {
-            alert('Game over!')
+            alert('Game over!');
         }
     }));
 
     $('body').on("click", "#reset-game", (function () {
-        console.log('clicked del');
         deleteCookies();
         location.reload();
     }));
-
 });
 
+function animateDice(i, positionOffset){
+    return new Promise((resolve, reject) => {
+        function animate(i, positionOffset) {
+            setTimeout(function() {
+                $( ".dices .dice" ).last().css( "background-position", '-' + positionOffset + 'px' );
+                positionOffset += 77;
+                if(i > 0){
+                    animate(i - 1, positionOffset);
+                } else {
+                    resolve(true);
+                }
+            }, 100);
+        }
+        animate(i, positionOffset);
+    });
+}
+
+function animatePimpa(route){
+    return new Promise((resolve, reject) => {
+        function animate(route) {
+            setTimeout(function() {
+                $( "#pimpa" ).removeClass().addClass(route.pop());
+                if(route.length > 0){
+                    animate(route);
+                } else {
+                    resolve(true);
+                }
+            }, 600);
+        }
+        animate(route.reverse());
+    });
+}
+
+function showDice(diceScore){
+    return new Promise((resolve, reject) => {
+        function show(diceScore) {
+            $("#dice-score").removeClass().addClass("dice-score-" + diceScore);
+            resolve(true);
+        }
+        show(diceScore);
+    });
+}
+
+function ajaxRefreshPage(diceScore){
+    $.ajax({
+        url: "/",
+        cache: false,
+        type: "POST",
+        data: "diceScore=" + diceScore,
+        dataType: "text",
+        success: function (data) {
+            var result = $(data).filter('.court').html();
+            $('.court').html(result);
+        }
+    });
+}
+
+function getDiceScore(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+/* COOKIES FUNCTIONS */
+
 function setCookie(name, value, options) {
-  options = options || {};
+    options = options || {};
 
-  var expires = options.expires;
+    var expires = options.expires;
 
-  if (typeof expires == "number" && expires) {
-    var d = new Date();
-    d.setTime(d.getTime() + expires * 1000);
-    expires = options.expires = d;
-  }
-  if (expires && expires.toUTCString) {
-    options.expires = expires.toUTCString();
-  }
-
-  value = encodeURIComponent(value);
-
-  var updatedCookie = name + "=" + value;
-
-  for (var propName in options) {
-    updatedCookie += "; " + propName;
-    var propValue = options[propName];
-    if (propValue !== true) {
-      updatedCookie += "=" + propValue;
+    if (typeof expires == "number" && expires) {
+        var d = new Date();
+        d.setTime(d.getTime() + expires * 1000);
+        expires = options.expires = d;
     }
-  }
+    if (expires && expires.toUTCString) {
+        options.expires = expires.toUTCString();
+    }
 
-  document.cookie = updatedCookie;
+    value = encodeURIComponent(value);
+
+    var updatedCookie = name + "=" + value;
+
+    for (var propName in options) {
+        updatedCookie += "; " + propName;
+        var propValue = options[propName];
+        if (propValue !== true) {
+            updatedCookie += "=" + propValue;
+        }
+    }
+
+    document.cookie = updatedCookie;
 }
 
 function getCookie(cname) {
@@ -75,48 +129,19 @@ function getCookie(cname) {
 }
 
 function deleteCookies() {
-  setCookie('gameState[stepScore]', "", {
-    expires: -1
-  })
-  setCookie('gameState[totalScore]', "", {
-    expires: -1
-  })
-  setCookie('gameState[position]', "", {
-    expires: -1
-  })
-  setCookie('gameState[diceCount]', "", {
-    expires: -1
-  })
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function animateDice(i, positionOffset){
-        setTimeout(function() {
-            $( ".dices .dice" ).last().css( "background-position", '-' + positionOffset + 'px' );
-            positionOffset += 77;
-            if(i > 0){
-                return animateDice(i - 1, positionOffset);
-            } else {
-                console.log('true');
-                return true;
-            }
-        }, 100);
-}
-
-function ajaxRefreshPage(){
-    var diceScore = getRandomInt(1, 6);
-    $.ajax({
-        url: "index.php",
-        cache: false,
-        type: "POST",
-        data: "diceScore=" + diceScore,
-        dataType: "text",
-        success: function (data) {
-            var result = $(data).filter('.court').html();
-            $('.court').html(result);
-        }
-    });
+    setCookie('gameState[diceScore]', "", {
+        expires: -1
+    })
+    setCookie('gameState[stepScore]', "", {
+        expires: -1
+    })
+    setCookie('gameState[totalScore]', "", {
+        expires: -1
+    })
+    setCookie('gameState[position]', "", {
+        expires: -1
+    })
+    setCookie('gameState[diceCount]', "", {
+        expires: -1
+    })
 }
